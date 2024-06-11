@@ -1,0 +1,29 @@
+# Gradle files
+.gradle/
+.idea/
+build/
+
+libs/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Android Studio captures folder
+captures/
+
+# Intellij
+*.iml
+*/*.iml
+*/*/*.iml
+
+# cxx
+*/**/.cxx
+
+# buildcache缓存目录
+/build-cache/
+
+# 过滤mac端 .DS_Store
+.DS_Store
+*/*.DS_Store
+*/*/*.DS_Store
+
