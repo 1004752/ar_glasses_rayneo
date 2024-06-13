@@ -49,7 +49,7 @@ class FixedFocusPosAdapter(
             make3DEffectForSide(root, isLeft, isSelectedPos)
             tvName.text = contact.displayName
             tvPhoto.text = contact.displayName.first().toString()
-            tvPhone.text = contact.phoneNum
+            tvDistance.text = contact.phoneNum
         }
     }
 

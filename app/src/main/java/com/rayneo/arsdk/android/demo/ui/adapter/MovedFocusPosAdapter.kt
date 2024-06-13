@@ -9,7 +9,7 @@ import androidx.annotation.NonNull
 import com.rayneo.arsdk.android.core.make3DEffectForSide
 import com.rayneo.arsdk.android.demo.R
 import com.rayneo.arsdk.android.demo.databinding.ItemTelephoneFavoriteMovedBinding
-import com.rayneo.arsdk.android.demo.ui.entity.Contact
+import com.rayneo.arsdk.android.demo.ui.entity.GolfCourse
 import com.rayneo.arsdk.android.ui.util.RecyclerViewFocusTracker
 import com.rayneo.arsdk.android.ext.BaseBindingHolder
 import com.rayneo.arsdk.android.ext.SimpleBindingAdapter
@@ -21,25 +21,25 @@ class MovedFocusPosAdapter(
     private val isLeft: Boolean,
     private val favoriteTracker: RecyclerViewFocusTracker
 ) : SimpleBindingAdapter<ItemTelephoneFavoriteMovedBinding>() {
-    private val mData = arrayListOf<Contact>()
+    private val mData = arrayListOf<GolfCourse>()
     private var focusedState = mutableMapOf<Long, Boolean>()
 
-    private fun Contact.isFocused(): Boolean {
+    private fun GolfCourse.isFocused(): Boolean {
         return focusedState[id] ?: false
     }
 
-    private fun Contact.setFocused(focused: Boolean) {
+    private fun GolfCourse.setFocused(focused: Boolean) {
         focusedState[id] = focused
     }
 
     /** 更新数据 */
-    fun setData(data: List<Contact>) {
+    fun setData(data: List<GolfCourse>) {
         mData.clear()
         mData.addAll(data)
         notifyDataSetChanged()
     }
 
-    fun getCurrentData(): Contact? {
+    fun getCurrentData(): GolfCourse? {
         val curPos = favoriteTracker.checkedSelectPos()
         if (curPos < 0 || curPos > mData.size - 1) {
             return null
@@ -52,8 +52,8 @@ class MovedFocusPosAdapter(
         position: Int
     ) {
         holder.binding.apply {
-            val contact = mData[position]
-            if (contact == Contact.Invalid) {
+            val golfCourse = mData[position]
+            if (golfCourse == GolfCourse.Invalid) {
                 root.visibility = View.INVISIBLE
                 return
             } else {
@@ -70,12 +70,12 @@ class MovedFocusPosAdapter(
             }
 
             make3DEffectForSide(root, isLeft, isSelectedPos)
-            tvName.text = contact.displayName
-            tvPhoto.text = contact.displayName.first().toString()
-            tvPhone.text = contact.phoneNum
+            tvName.text = golfCourse.displayName
+            tvPhoto.text = golfCourse.displayName.first().toString()
+            tvDistance.text = golfCourse.distance
 
             if (isSelectedPos) {
-                if (!contact.isFocused()) {
+                if (!golfCourse.isFocused()) {
                     startZoomWith(layoutContent, NORMAL_SIZE.first, FOCUSED_SIZE.first)
                     startZoomHeight(layoutContent, NORMAL_SIZE.second, FOCUSED_SIZE.second)
                 } else {
@@ -84,9 +84,9 @@ class MovedFocusPosAdapter(
 //                    lp.height = FOCUSED_SIZE.second
 //                    layoutContent.layoutParams = lp
                 }
-                contact.setFocused(true)
+                golfCourse.setFocused(true)
             } else {
-                if (contact.isFocused()) {
+                if (golfCourse.isFocused()) {
                     startZoomWith(layoutContent, FOCUSED_SIZE.first, NORMAL_SIZE.first)
                     startZoomHeight(layoutContent, FOCUSED_SIZE.second, NORMAL_SIZE.second)
                 } else {
@@ -95,7 +95,7 @@ class MovedFocusPosAdapter(
 //                    lp.height = NORMAL_SIZE.second
 //                    layoutContent.layoutParams = lp
                 }
-                contact.setFocused(false)
+                golfCourse.setFocused(false)
             }
         }
     }
