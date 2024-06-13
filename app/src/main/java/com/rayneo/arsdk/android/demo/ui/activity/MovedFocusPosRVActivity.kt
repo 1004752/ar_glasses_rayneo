@@ -156,7 +156,7 @@ class MovedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewMovedFocusB
     private fun useLocation() {
         val location = locationService?.lastLocation
         if (location != null) {
-//            FToast.show("latitude: ${location.latitude}\nlongitude:${location.longitude}")
+//            FToast.show("latitcaude: ${location.latitude}\nlongitude:${location.longitude}")
             Log.d("MovedFocusPosRVActivity", "Current Location: ${location.latitude}, ${location.longitude}")
         } else {
             Log.d("MovedFocusPosRVActivity", "Location is null")

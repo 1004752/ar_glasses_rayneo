@@ -101,8 +101,8 @@ class DemoHomeActivity : BaseMirrorActivity<LayoutDemoHomeBinding>() {
     }
 
     // 고정된 장소의 위도와 경도
-    private val fixedLatitude = 37.40383
-    private val fixedLongitude = 127.10296
+    private val fixedLatitude = 37.40379
+    private val fixedLongitude = 127.10301
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -206,8 +206,8 @@ class DemoHomeActivity : BaseMirrorActivity<LayoutDemoHomeBinding>() {
                                 val location = locationService?.lastLocation
                                 if (location != null) {
                                     val distance = locationService?.calculateDistance(location.latitude, location.longitude, fixedLatitude, fixedLongitude)
-                                    FToast.show("Distance to fixed location: $distance meters")
-                                    Log.d("GPS", "Distance to fixed location: $distance meters")
+                                    FToast.show("Distance to Posco ICT:\n$distance")
+                                    Log.d("GPS", "Distance to Posco ICT:\n$distance")
                                 } else {
                                     FToast.show("Location is null")
                                 }

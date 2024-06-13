@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.rayneo.arsdk.android.ui.toast.FToast
 
 class LocationService : Service() {
 
@@ -31,6 +32,11 @@ class LocationService : Service() {
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 lastLocation = location
+                val fixedLatitude = 37.40379
+                val fixedLongitude = 127.10301
+                val distance = calculateDistance(location.latitude, location.longitude, fixedLatitude, fixedLongitude)
+                FToast.show("Distance to Posco ICT:\n$distance")
+                Log.d("LocationService", "Distance to Posco ICT:\n$distance")
                 Log.d("LocationService", "New location: ${location.latitude}, ${location.longitude}")
             }
 
@@ -54,7 +60,7 @@ class LocationService : Service() {
     fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
         val results = FloatArray(1)
         Location.distanceBetween(lat1, lon1, lat2, lon2, results)
-        return (results[0] / 1000).toString() + "km"
+        return results[0].toString() + "m"
     }
 
     inner class LocalBinder : Binder() {
