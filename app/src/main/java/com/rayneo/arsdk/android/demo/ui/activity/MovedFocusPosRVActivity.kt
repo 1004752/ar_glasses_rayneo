@@ -12,6 +12,7 @@ import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rayneo.arsdk.android.core.ViewPair
+import com.rayneo.arsdk.android.demo.NativeManager
 import com.rayneo.arsdk.android.demo.databinding.LayoutRecyclerviewMovedFocusBinding
 import com.rayneo.arsdk.android.demo.ui.adapter.MovedFocusPosAdapter
 import com.rayneo.arsdk.android.demo.ui.entity.GolfCourse
@@ -25,6 +26,7 @@ import com.rayneo.arsdk.android.ui.activity.BaseMirrorActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.*
 
 /**
  * RecyclerView with fixed focus position
@@ -32,6 +34,8 @@ import kotlinx.coroutines.launch
 class MovedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewMovedFocusBinding>() {
     private lateinit var favoriteTracker: RecyclerViewFocusTracker
     private var locationService: LocationService? = null
+    private var currentLat = 0.0
+    private var currentLon = 0.0
     private var isBound = false
 
     private val serviceConnection = object : ServiceConnection {
@@ -40,6 +44,7 @@ class MovedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewMovedFocusB
             locationService = binder.getService()
             isBound = true
             useLocation()
+            fetchDataFromApi()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -58,8 +63,6 @@ class MovedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewMovedFocusB
         startService(serviceIntent)
         val bindResult = bindService(Intent(this, LocationService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
         Log.d("MovedFocusPosRVActivity", "Bind result: $bindResult")
-
-        fetchDataFromApi()
 
         initView()
         initEvent()
@@ -120,7 +123,29 @@ class MovedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewMovedFocusB
     private fun fetchDataFromApi() {
         lifecycleScope.launch {
             try {
-                val response = golfCourseService.getGolfCourses()
+                val distanceInKm = 5.0
+                val (NW, SE) = calculateNWandSEPoints(currentLat, currentLon, distanceInKm)
+//                FToast.show("BOX(${NW.second},${NW.first},${SE.second},${SE.first})")
+                Log.d("Circle", "$currentLat / $currentLon")
+                Log.d("Circle", "BOX(${NW.second},${NW.first},${SE.second},${SE.first})")
+
+                val response = golfCourseService.getGolfCourses(
+                    service="data",
+                    version="2.0",
+                    request="GetFeature",
+                    format="json",
+                    errorformat="json",
+                    size="10",
+                    page="1",
+                    data="LT_P_SGISGOLF",
+                    geomfilter="BOX(${NW.second},${NW.first},${SE.second},${SE.first})",
+                    columns="golf_name,ag_geom",
+                    geometry="true",
+                    attribute="true",
+                    crs="EPSG:4019",
+                    key="814270A2-3CDC-3BAA-A6F2-81F54C823AE4",
+                    domain=""
+                )
                 val features = response.response.result.featureCollection.features
                 val golfCourses = features.mapIndexed { index, feature ->
                     GolfCourse(
@@ -156,10 +181,36 @@ class MovedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewMovedFocusB
     private fun useLocation() {
         val location = locationService?.lastLocation
         if (location != null) {
+            currentLat = location.latitude
+            currentLon = location.longitude
 //            FToast.show("latitcaude: ${location.latitude}\nlongitude:${location.longitude}")
             Log.d("MovedFocusPosRVActivity", "Current Location: ${location.latitude}, ${location.longitude}")
         } else {
             Log.d("MovedFocusPosRVActivity", "Location is null")
         }
+    }
+
+    private fun calculateOffsetCoordinates(lat: Double, lon: Double, distanceInKm: Double, bearingInDegrees: Double): Pair<Double, Double> {
+        val R = 6371.0 // Radius of the Earth in kilometers
+        val bearing = Math.toRadians(bearingInDegrees)
+
+        val lat1 = Math.toRadians(lat)
+        val lon1 = Math.toRadians(lon)
+
+        val lat2 = asin(sin(lat1) * cos(distanceInKm / R) +
+                cos(lat1) * sin(distanceInKm / R) * cos(bearing))
+        val lon2 = lon1 + atan2(sin(bearing) * sin(distanceInKm / R) * cos(lat1),
+            cos(distanceInKm / R) - sin(lat1) * sin(lat2))
+
+        return Pair(Math.toDegrees(lat2), Math.toDegrees(lon2))
+    }
+
+    private fun calculateNWandSEPoints(currentLat: Double, currentLon: Double, distanceInKm: Double): Pair<Pair<Double, Double>, Pair<Double, Double>> {
+        // Bearing for NW is 315 degrees (360 - 45)
+        val NW = calculateOffsetCoordinates(currentLat, currentLon, distanceInKm, 315.0)
+        // Bearing for SE is 135 degrees (180 - 45)
+        val SE = calculateOffsetCoordinates(currentLat, currentLon, distanceInKm, 135.0)
+
+        return Pair(NW, SE)
     }
 }
