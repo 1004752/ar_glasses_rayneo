@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
-        applicationId "com.rayneo.arsdk.android.demo"
+        applicationId "com.sk.csplayer"
         minSdk 26
         targetSdk 30
         versionCode 1
@@ -37,28 +37,26 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.fragment:fragment-ktx:1.5.3'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.2'
+    implementation 'com.google.android.material:material:1.12.0'
 
     // 2. aar文件引入模式
     implementation(fileTree("libs"))
-    implementation files('libs\\ipc-release.aar')
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation("androidx.fragment:fragment-ktx:1.5.3")
-    implementation 'androidx.activity:activity-ktx:1.3.0-alpha08'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    // kotlin & coroutines
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.4'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation files('libs/ipc-release.aar')
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation("androidx.fragment:fragment-ktx:1.8.0")
+    implementation 'androidx.activity:activity-ktx:1.9.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+// kotlin & coroutines
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha13")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
+    implementation project(path: ':VcsLibrary')
 }

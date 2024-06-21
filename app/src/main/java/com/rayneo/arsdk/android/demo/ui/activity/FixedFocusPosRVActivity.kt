@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rayneo.arsdk.android.R
 import com.rayneo.arsdk.android.core.ViewPair
 import com.rayneo.arsdk.android.core.make3DEffectForSide
+import com.rayneo.arsdk.android.demo.R
 import com.rayneo.arsdk.android.demo.databinding.LayoutRecyclerviewBinding
 import com.rayneo.arsdk.android.demo.ui.adapter.FixedFocusPosAdapter
 import com.rayneo.arsdk.android.demo.ui.entity.contactList
@@ -98,7 +98,7 @@ class FixedFocusPosRVActivity : BaseMirrorActivity<LayoutRecyclerviewBinding>() 
                 itemAnimator = null
                 val snapHelper = StartSnapHelper(41.dp)
                 snapHelper.attachToRecyclerView(this)
-                setTag(R.id.tag_snap_helper, snapHelper)
+//                setTag(R.id.tag_snap_helper, snapHelper)
             }
             make3DEffectForSide(this.ivSelectHover, isLeft, isLeft)
             favoriteTracker.setCurrentSelectPos(0)
