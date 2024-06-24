@@ -1,6 +1,5 @@
 package com.sk.csplayer
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
@@ -12,6 +11,8 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.Surface
 import com.rayneo.arsdk.android.demo.R
+import com.rayneo.arsdk.android.demo.databinding.ActivityAlphaVcsPlayerBinding
+import com.rayneo.arsdk.android.ui.activity.BaseMirrorActivity
 import com.sk.csplayer.util.VcsConnectionManager
 import com.sk.vcs.ErrorCode
 import com.sk.vcs.VcsDefine
@@ -23,7 +24,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class AlphaVcsPlayerActivity : Activity() {
+class AlphaVcsPlayerActivity : BaseMirrorActivity<ActivityAlphaVcsPlayerBinding>() {
     private var mVcsPlayer: VcsPlayer? = null
     private var mVcsSurface: Surface? = null
     private var mVcsGlTextureView: VcsGlTextureView? = null
@@ -31,21 +32,22 @@ class AlphaVcsPlayerActivity : Activity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alpha_vcs_player)
 
         StrictMode.setThreadPolicy(
             StrictMode.ThreadPolicy.Builder().permitDiskReads().permitDiskWrites().permitNetwork().build()
         )
 
-        mVcsGlTextureView = findViewById(R.id.vcs_gl_texture_view)
-        mVcsGlTextureView?.apply {
-            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY)
-            setOpaque(false)
-            setSurfaceCallback(mOnSurfaceCallback)
-        }
+        mBindingPair.updateView {
+            mVcsGlTextureView = findViewById(R.id.vcs_gl_texture_view)
+            mVcsGlTextureView?.apply {
+                setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY)
+                setOpaque(false)
+                setSurfaceCallback(mOnSurfaceCallback)
+            }
 
-        mVcsPlayer = VcsPlayer().apply {
-            setOnVcsEventListener(mOnVcsEventListener)
+            mVcsPlayer = VcsPlayer().apply {
+                setOnVcsEventListener(mOnVcsEventListener)
+            }
         }
     }
 
@@ -199,4 +201,5 @@ class AlphaVcsPlayerActivity : Activity() {
     companion object {
         private const val TAG = "AlphaVcsPlayerActivity"
     }
+
 }
