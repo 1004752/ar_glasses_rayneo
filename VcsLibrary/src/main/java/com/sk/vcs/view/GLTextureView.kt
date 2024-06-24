@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.TextureView
 import android.view.View
 import androidx.annotation.CallSuper
+import com.sk.vcs.utils.LogUtils.initLogUniqueId
 import java.io.Writer
 import java.lang.ref.WeakReference
 import java.util.concurrent.locks.ReentrantLock
@@ -127,6 +128,7 @@ open class GLTextureView @JvmOverloads constructor(
     }
 
     init {
+        initLogUniqueId()
         surfaceTextureListener = this
     }
 
