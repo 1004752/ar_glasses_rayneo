@@ -43,6 +43,7 @@ dependencies {
     // 2. aar文件引入模式
     implementation(fileTree("libs"))
     implementation files('libs/ipc-release.aar')
+    implementation files('libs/VcsLibrary-7.0.0.18-debug.aar')
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation("androidx.fragment:fragment-ktx:1.8.0")
     implementation 'androidx.activity:activity-ktx:1.9.0'
@@ -58,5 +59,4 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha13")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
-    implementation project(path: ':VcsLibrary')
 }
